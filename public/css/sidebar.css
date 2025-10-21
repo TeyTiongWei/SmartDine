@@ -1,0 +1,21 @@
+#sidebar li {
+    margin-bottom: 1rem; /* equivalent to mb-3 */
+    /* border: 1px solid yellow; */
+}
+
+#sidebar li a {
+    font-weight: 600; /* same as fw-semibold */
+    color: white;
+    font-size: large;
+}
+
+#sidebar li a:hover {
+    color: lightgray;
+    filter: brightness(0.8);
+    transition: filter 0.3s ease, color 0.3s ease;
+}
+
+#sidebar li a img {
+    width: 24px;
+    height: 24px;
+}
