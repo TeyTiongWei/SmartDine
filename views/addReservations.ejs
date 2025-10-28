@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Reservations</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/background.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <!-- Sidebar -->
+            <div class="col-auto col-md-3 col-lg-3 col-xl-2 px-sm-2 px-0 bg-primary">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <div href="/" class="pb-4 text-white text-decoration-none mx-auto text-center">
+                        <img src="/images/logo.png" width="150" height="150" alt="logo" class="me-2">
+                        <span class="fs-2 fw-semibold d-none d-sm-inline text-white">SmartDine</span>
+                    </div>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="sidebar">
+                        <li class="nav-item">
+                            <a href="/dashboard" class="nav-link align-middle px-0">
+                                <img src="/images/dashboard.png" alt="dashboard"> 
+                                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/tables" class="nav-link px-0 align-middle">
+                                <img src="/images/tables.png" alt="tables">
+                                <span class="ms-1 d-none d-sm-inline">Tables & Appliances</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/addReservations" class="nav-link px-0 align-middle">
+                                <img src="/images/addReservations.png" alt="addReservations">
+                                <span class="ms-1 d-none d-sm-inline">Add Reservations</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/viewReservations" class="nav-link px-0 align-middle">
+                                <img src="/images/viewReservations.png" alt="viewReservations">
+                                <span class="ms-1 d-none d-sm-inline">View Reservations</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/appliances" class="nav-link px-0 align-middle">
+                                <img src="/images/appliances.png" alt="appliances">
+                                <span class="ms-1 d-none d-sm-inline">Appliance Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="pb-4 w-100 px-1">
+                        <button class="btn btn-danger btn-lg w-100 fw-semibold" id="logoutBtn">Logout</button>
+                    </div>
+                    <!-- <div class="dropdown pb-4">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/images/admin-icon.png" width="30" height="30" alt="admin">
+                            <span class="d-none d-sm-inline mx-1">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col px-5 py-4">
+                <!-- Main content goes here -->
+                <div class="mb-4">
+                    <h1 class="fw-bold mb-0">Add New Reservations</h1>
+                    <p class="text-secondary fs-4">Create a new reservation for a customer</p>
+                </div>
+                <div class="border border-2 rounded-4 px-5 py-4">
+                    <form action="/addReservations" method="POST" class="needs-validation" novalidate>
+                        <div class="col-12">
+                            <div class="row g-4 mb-4">
+                                <div class="col-lg-6">
+                                    <label for="customerName" class="form-label fw-medium">Customer Name</label>
+                                    <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter Customer's Full Name" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid customer name.
+                                        </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="partySize" class="form-label fw-medium">Party Size</label>
+                                    <input type="number" class="form-control" id="partySize" name="partySize" placeholder="Number of guests" min="1" max="8" required>
+                                        <div class="invalid-feedback">
+                                            Party Size must be between 1 - 8 guests.
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row g-4 mb-4">
+                                <div class="col-lg-6">
+                                    <label for="phoneNumber" class="form-label fw-medium">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="0123456789" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid phone number.
+                                        </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="tableNumber" class="form-label fw-medium">Table Number</label>
+                                    <select class="form-select" id="tableNumber" name="tableNumber" required>
+                                        <option selected disabled value="">Select a Table</option>
+                                        <% tables.forEach((table) => { %>
+                                            <option value="<%= table.table_number %>" data-capacity="<%= table.capacity %>">
+                                                <%= table.table_number %> (Max: <%= table.capacity %> People)
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                        <div class="invalid-feedback">
+                                            Please select a table.
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row g-4 mb-4">
+                                <div class="col-lg-6">
+                                    <label for="email" class="form-label fw-medium">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="customer@gmail.com" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid email.
+                                        </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="reservationDate" class="form-label fw-medium">Reservation Date</label>
+                                    <input type="date" class="form-control" id="reservationDate" name="reservationDate" placeholder="Select a Date" min="" required>
+                                        <div class="invalid-feedback">
+                                            Please choose a valid reservation date.
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row g-4 mb-4">
+                                <div class="col-lg-6">
+                                    <label for="specialRequests" class="form-label fw-medium">Special Requests (Optional)</label>
+                                    <input type="text" class="form-control" id="specialRequests" name="specialRequests" placeholder="Any special accommodations or requests">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="reservationTime" class="form-label fw-medium">Reservation Time</label>
+                                    <input type="time" class="form-control" id="reservationTime" name="reservationTime" placeholder="Select a Time" required>
+                                        <div class="invalid-feedback">
+                                            Please choose a valid reservation time.
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row g-2 mb-3 mt-4">
+                                <% if (error && error.length > 0) { %>
+                                    <p class="text-danger text-center fw-semibold mb-3">
+                                        <%= error %>
+                                    </p>
+                                <% } %>
+                                <div class="col-lg-2 offset-lg-7">
+                                    <button type="reset" class="btn btn-lg btn-secondary w-100 fw-semibold">Cancel</button>
+                                </div>
+                                <div class="col-lg-3">
+                                    <button type="submit" class="btn btn-lg btn-primary w-100 fw-semibold">Create Reservation</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/validateForms.js"></script>
+    <script>
+        const partySizeInput = document.getElementById("partySize");
+        const tableSelect = document.getElementById("tableNumber");
+
+        // Store all the table options (except the first "Select a Table")
+        const allOptions = Array.from(tableSelect.querySelectorAll("option[data-capacity]"));
+
+        partySizeInput.addEventListener("input", () => {
+            const size = parseInt(partySizeInput.value);
+
+            // Always reset dropdown back to default
+            tableSelect.innerHTML = '<option selected disabled value="">Select a Table</option>';
+
+            // Filter tables that can fit the entered party size
+            const filtered = allOptions.filter(opt => parseInt(opt.dataset.capacity) >= size);
+
+            // Add only the filtered options back
+            filtered.forEach(opt => tableSelect.appendChild(opt));
+
+            // Reset selection visually too
+            tableSelect.selectedIndex = 0;
+        });
+    </script>
+    <script>
+        // Prevent user from selecting past dates
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("reservationDate").setAttribute("min", today);
+    </script>
+</body>
+</html>

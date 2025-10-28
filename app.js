@@ -5,6 +5,7 @@ const path = require("path");
 const pool = require("./database"); // Might not need this
 const login = require('./controllers/loginController');
 const register = require('./controllers/registerController');
+const {renderAddReservationsPage ,addReservations} = require('./controllers/addReservationsController');
 const app = express();
 
 app.set("view engine", "ejs");
@@ -43,9 +44,9 @@ app.get("/register", (req, res) => {
 
 app.post("/register", register);
 
-app.get("/sidebar", (req, res) => {
-    res.render("sidebar");
-})
+app.get("/addReservations", renderAddReservationsPage);
+
+app.post("/addReservations", addReservations);
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
