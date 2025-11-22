@@ -2,11 +2,11 @@ const pool = require("../database");
 
 const renderAddReservationsPage = async (req, res) => {
     try {
-        const tablesQuery = "SELECT table_number, capacity FROM tables WHERE status = 'available' ORDER BY id";
+        const tablesQuery = "SELECT table_number, capacity FROM tables WHERE status = 'Available' ORDER BY id";
         const tablesResult = await pool.query(tablesQuery);
         const tables = tablesResult.rows;
 
-        res.render("addReservations", { tables });
+        res.render("addReservations", { tables, needsValidation: true });
 
     } catch (error) {
         console.error("Error loading reservation form:", error);
@@ -46,7 +46,7 @@ const addReservations = async (req, res) => {
             return res.redirect("/addReservations");
         }
 
-        const checkTableAvailabilityQuery = "SELECT * FROM tables WHERE table_number = $1 AND status = 'available'";
+        const checkTableAvailabilityQuery = "SELECT * FROM tables WHERE table_number = $1 AND status = 'Available'";
         const tableAvailabilityResult = await pool.query(checkTableAvailabilityQuery, [tableNumber]);
 
         if (tableAvailabilityResult.rows.length !== 0) {
@@ -85,7 +85,7 @@ const addReservations = async (req, res) => {
         ]);
 
         // Update table status to 'reserved'
-        const updateTableStatusQuery = "UPDATE tables SET status = 'reserved' WHERE table_number = $1";
+        const updateTableStatusQuery = "UPDATE tables SET status = 'Reserved' WHERE table_number = $1";
         await pool.query(updateTableStatusQuery, [tableNumber]);
 
         res.redirect("/viewReservations");

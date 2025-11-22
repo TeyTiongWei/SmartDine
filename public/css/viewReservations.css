@@ -1,0 +1,43 @@
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-fixed th, .table-fixed td {
+  padding: 1.5rem 0rem;
+}
+
+/* .table-fixed tbody tr:not(:last-child) td,
+.table-fixed tbody tr:not(:last-child) th {
+  padding: 2rem 0rem;
+} */
+
+.table th, .table td {
+  border-bottom: 2px solid #dee2e6; /* darker gray */
+}
+
+/* Remove border only from the last row */
+.table-fixed tbody tr:last-child th, .table-fixed tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-ongoing,
+.status-completed {
+    color: #08A300 !important;
+}
+
+.status-scheduled {
+    color: #D7A400 !important; 
+}
+
+.status-cancelled {
+    color: #FF0000 !important;
+}
+
+a.disabled {
+  color: gray;
+  pointer-events: none;
+  text-decoration: none;
+  cursor: default;
+  opacity: 0.6;
+}

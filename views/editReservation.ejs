@@ -1,28 +1,30 @@
 <%- contentFor('title') %>
-Add New Reservations
+Edit Reservation
 
 <%- contentFor('css') %>
 
 <%- contentFor('body') %>
 <!-- Main content goes here -->
 <div class="mb-4">
-    <h1 class="fw-bold mb-0">Add New Reservations</h1>
-    <p class="text-secondary fs-4">Create a new reservation for a customer</p>
+    <h1 class="fw-bold mb-0">Edit Reservation</h1>
+    <p class="text-secondary fs-4">Modify a customer's existing reservation</p>
 </div>
 <div class="border border-2 rounded-4 px-5 py-4">
-    <form action="/addReservations" method="POST" class="needs-validation" novalidate>
+    <form action="/editReservation/<%= reservation.id %>" method="POST" class="needs-validation" novalidate>
         <div class="col-12">
             <div class="row g-4 mb-4">
                 <div class="col-lg-6">
                     <label for="customerName" class="form-label fw-medium">Customer Name</label>
-                    <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter Customer's Full Name" required autofocus>
+                    <input type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter Customer's Full Name" 
+                        value="<%= reservation.customer_name %>" required autofocus>
                         <div class="invalid-feedback">
                             Please enter a valid customer name.
                         </div>
                 </div>
                 <div class="col-lg-6">
                     <label for="partySize" class="form-label fw-medium">Party Size</label>
-                    <input type="number" class="form-control" id="partySize" name="partySize" placeholder="Number of guests" min="1" max="8" required>
+                    <input type="number" class="form-control" id="partySize" name="partySize" placeholder="Number of guests" min="1" max="8"
+                        value="<%= reservation.party_size %>" required>
                         <div class="invalid-feedback">
                             Party Size must be between 1 - 8 guests.
                         </div>
@@ -33,7 +35,8 @@ Add New Reservations
             <div class="row g-4 mb-4">
                 <div class="col-lg-6">
                     <label for="phoneNumber" class="form-label fw-medium">Phone Number</label>
-                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="0123456789" required>
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="0123456789"
+                        value="<%= reservation.phone_number %>" required>
                         <div class="invalid-feedback">
                             Please enter a valid phone number.
                         </div>
@@ -43,7 +46,8 @@ Add New Reservations
                     <select class="form-select" id="tableNumber" name="tableNumber" required>
                         <option selected disabled value="">Select a Table</option>
                         <% tables.forEach((table) => { %>
-                            <option value="<%= table.table_number %>" data-capacity="<%= table.capacity %>">
+                            <option value="<%= table.table_number %>" data-capacity="<%= table.capacity %>"
+                                <%= reservation.table_number === table.table_number ? 'selected' : '' %>>
                                 <%= table.table_number %> (Max: <%= table.capacity %> People)
                             </option>
                         <% }) %>
@@ -58,14 +62,16 @@ Add New Reservations
             <div class="row g-4 mb-4">
                 <div class="col-lg-6">
                     <label for="email" class="form-label fw-medium">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="customer@gmail.com" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="customer@gmail.com"
+                        value="<%= reservation.email %>" required>
                         <div class="invalid-feedback">
                             Please enter a valid email.
                         </div>
                 </div>
                 <div class="col-lg-6">
                     <label for="reservationDate" class="form-label fw-medium">Reservation Date</label>
-                    <input type="date" class="form-control" id="reservationDate" name="reservationDate" placeholder="Select a Date" min="" required>
+                    <input type="date" class="form-control" id="reservationDate" name="reservationDate" placeholder="Select a Date" min=""
+                        value="<%= reservation.reservation_date %>" required>
                         <div class="invalid-feedback">
                             Please choose a valid reservation date.
                         </div>
@@ -76,11 +82,13 @@ Add New Reservations
             <div class="row g-4 mb-4">
                 <div class="col-lg-6">
                     <label for="specialRequests" class="form-label fw-medium">Special Requests (Optional)</label>
-                    <input type="text" class="form-control" id="specialRequests" name="specialRequests" placeholder="Any special accommodations or requests">
+                    <input type="text" class="form-control" id="specialRequests" name="specialRequests" placeholder="Any special accommodations or requests"
+                        value="<%= reservation.special_requests %>">
                 </div>
                 <div class="col-lg-6">
                     <label for="reservationTime" class="form-label fw-medium">Reservation Time</label>
-                    <input type="time" class="form-control" id="reservationTime" name="reservationTime" placeholder="Select a Time" required>
+                    <input type="time" class="form-control" id="reservationTime" name="reservationTime" placeholder="Select a Time"
+                        value="<%= reservation.reservation_time %>" required>
                         <div class="invalid-feedback">
                             Please choose a valid reservation time.
                         </div>
@@ -94,11 +102,19 @@ Add New Reservations
                         <%= error %>
                     </p>
                 <% } %>
-                <div class="col-lg-2 offset-lg-7">
-                    <button type="reset" class="btn btn-lg btn-secondary w-100 fw-semibold">Cancel</button>
+                <div class="col-lg-3">
+                    <!-- <form action="/editReservation/<%= reservation.id %>?_method=PATCH" method="POST"> -->
+                        <!-- <input type="hidden" name="_method" value="PATCH"> -->
+                        <button type="submit" formaction="/editReservation/<%= reservation.id %>?_method=PATCH" class="btn btn-lg btn-danger w-100 fw-semibold">Cancel Reservation</button>
+                    <!-- </form> -->
+                    <!-- <a href="/viewReservations" class="btn btn-lg btn-danger w-100 fw-semibold">Cancel Reservation</a> -->
+                </div>
+                <div class="col-lg-2 offset-lg-4">
+                    <a href="/viewReservations" class="btn btn-lg btn-secondary w-100 fw-semibold">Back</a>
+                    <!-- <button type="reset" class="btn btn-lg btn-secondary w-100 fw-semibold">Back</button> -->
                 </div>
                 <div class="col-lg-3">
-                    <button type="submit" class="btn btn-lg btn-primary w-100 fw-semibold">Create Reservation</button>
+                    <button type="submit" class="btn btn-lg btn-primary w-100 fw-semibold">Save Changes</button>
                 </div>
             </div>
         </div>

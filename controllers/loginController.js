@@ -12,7 +12,7 @@ const login = async(req, res) => {
             return res.redirect("/login");
         }
 
-        res.redirect("/dashboard");
+        res.redirect("/addReservations");
 
     } catch (error) {
         console.error("Login error:", error);
