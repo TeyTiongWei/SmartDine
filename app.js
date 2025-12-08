@@ -1,4 +1,6 @@
 const express = require("express");
+const http = require('http');
+const socketIo = require('socket.io');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -9,8 +11,14 @@ const register = require('./controllers/registerController');
 const {renderAddReservationsPage, addReservations} = require('./controllers/addReservationsController');
 const {renderViewReservationsPage} = require('./controllers/viewReservationsController');
 const {renderEditReservationPage, updateReservation, cancelReservation} = require('./controllers/editReservationController');
+const {renderTablesPage, toggleAppliance, toggleAllAppliances} = require('./controllers/tablesController');
+const { startScheduler } = require('./public/js/scheduler');
 const methodOverride = require('method-override');
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server); // Initialize Socket.IO
+
+startScheduler(io);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -70,6 +78,15 @@ app.post("/editReservation/:id", updateReservation);
 
 app.patch("/editReservation/:id", cancelReservation);
 
-app.listen(3000, () => {
+app.get("/tables", renderTablesPage);
+
+app.post("/toggleAppliance", toggleAppliance);
+
+app.post("/toggleAllAppliances", toggleAllAppliances);
+
+// startScheduler(io);
+
+server.listen(3000, () => {
     console.log("Server is running on port 3000");
+    // startScheduler();
 })

@@ -1,0 +1,44 @@
+<%
+const getSvg = (capacity) => {
+    const svgs = {
+        2: `<svg width="76" height="46" viewBox="0 0 76 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="11" width="54" height="46" rx="10" fill="currentColor"/>
+                <rect x="68" y="4" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect y="4" width="8" height="39" rx="4" fill="currentColor"/>
+            </svg>`,
+
+        4: `<svg width="76" height="68" viewBox="0 0 76 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="11" y="11" width="54" height="46" rx="10" fill="currentColor"/>
+                <rect x="68" y="15" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect x="13" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="13" y="60" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect y="15" width="8" height="39" rx="4" fill="currentColor"/>
+            </svg>`,
+
+        6: `<svg width="130" height="68" viewBox="0 0 130 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="11" y="11" width="108" height="46" rx="10" fill="currentColor"/>
+                <rect x="122" y="15" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect x="13" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="13" y="60" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="65" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="65" y="60" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect y="15" width="8" height="39" rx="4" fill="currentColor"/>
+            </svg>`,
+
+        8: `<svg width="130" height="114" viewBox="0 0 130 114" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="11" y="11" width="108" height="92" rx="10" fill="currentColor"/>
+                <rect x="122" y="15" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect x="13" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="13" y="106" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="65" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect x="65" y="106" width="50" height="8" rx="4" fill="currentColor"/>
+                <rect y="15" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect x="122" y="57" width="8" height="39" rx="4" fill="currentColor"/>
+                <rect y="57" width="8" height="39" rx="4" fill="currentColor"/>
+            </svg>`
+    };
+    return svgs[capacity] || '';
+};
+%>
+
+<%- getSvg(capacity) %>

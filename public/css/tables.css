@@ -1,0 +1,92 @@
+.indicator-available {
+    width: 20px; 
+    height: 20px; 
+    background-color: #0BDE00;
+}
+
+.indicator-reserved {
+    width: 20px; 
+    height: 20px; 
+    background-color: #F4C300;
+}
+
+.indicator-occupied {
+    width: 20px; 
+    height: 20px; 
+    background-color: #FE0101;
+}
+
+.table-status-available {
+    color: #0BDE00;
+}
+
+.table-status-reserved {
+    color: #F4C300;
+}
+
+.table-status-occupied {
+    color: #FE0101;
+}
+
+/* .tables-grid-2x4 > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+/* .tables-grid-2x4 svg {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+} */
+
+/* Fixed 2x4 Grid Layout */
+.tables-grid-zone-A {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1.5rem 0;
+    margin-top: 1.8rem;
+    width: 100%;
+}
+
+
+
+.tables-grid-zone-B {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1.5rem 0;
+    width: 100%;
+}
+
+.tables-grid-zone-C {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 1.5rem 0;
+    width: 100%;
+}
+
+.tables-grid-zone-D {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: 2rem;
+    padding: 1.5rem 0;
+    margin-top: 1.8rem;
+    width: 100%;
+}
+
+/* Ensure SVGs scale properly */
+.tables-grid-zone-A > div,
+.tables-grid-zone-B > div,
+.tables-grid-zone-C > div,
+.tables-grid-zone-D > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
