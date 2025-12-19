@@ -1,25 +1,48 @@
 const pool = require("../database");
+const bcrypt = require('bcrypt');
+
+const renderLoginPage = (req, res) => {
+    res.render("login", { layout: false });
+}
 
 const login = async(req, res) => {
     try {
         const {username, password} = req.body;
-        loginQuery = "SELECT * FROM admins WHERE username = $1 AND password = $2";
-        const admin = await pool.query(loginQuery, [username, password]);
+        const loginQuery = "SELECT * FROM admins WHERE username = $1";
+        const result = await pool.query(loginQuery, [username]);
 
-        if (admin.rows.length === 0) { 
-            // return res.status(401).json({message: "Invalid credentials"});   Version 1
+        if (result.rows.length === 0) { 
             req.flash("error", "Incorrect username or password");
             return res.redirect("/login");
         }
 
-        res.redirect("/addReservations");
+        const admin = result.rows[0];
+        const isPasswordMatch = await bcrypt.compare(password, admin.password);
+
+        if (!isPasswordMatch) {
+            req.flash("error", "Incorrect username or password");
+            return res.redirect("/login");
+        }
+
+        // Set the session
+        req.session.adminId = admin.id;
+
+        res.redirect("/dashboard");
 
     } catch (error) {
         console.error("Login error:", error);
         req.flash("error", "An error has occured. Please try again.");
         res.redirect("/login");
-        // res.status(500).json({message: "Server error"});   Version 1
     }
 }
 
-module.exports = login;
+const logout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            res.redirect("/dasboard");
+        }
+        res.redirect("/login");
+    });
+}
+
+module.exports = { renderLoginPage, login, logout };

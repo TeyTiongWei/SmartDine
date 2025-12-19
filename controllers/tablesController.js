@@ -59,6 +59,11 @@ const toggleAppliance = async (req, res) => {
         const updateStatusQuery = "UPDATE appliances SET status = $1 WHERE zone = $2 AND name = $3 RETURNING status";
         const updateResult = await pool.query(updateStatusQuery, [newStatus, zone, name]);
 
+        // Log the activity
+        const activity = `${name} switched ${newStatus ? 'on' : 'off'}`;
+        const logActivityQuery = "INSERT INTO appliance_activity_logs (zone, activity) VALUES ($1, $2)";
+        await pool.query(logActivityQuery, [zone, activity]);
+
         res.json({ success: true, status: updateResult.rows[0].status });
     } catch (error) {
         console.error("Error toggling appliance: ", error);
@@ -74,6 +79,11 @@ const toggleAllAppliances = async (req, res) => {
         const newStatus = !allOn;
         const updateAllQuery = "UPDATE appliances SET status = $1 WHERE zone = $2 RETURNING *";
         const updateAllResult = await pool.query(updateAllQuery, [newStatus, zone]);
+
+        // Log the activity
+        const activity = `All appliances switched ${newStatus ? 'on' : 'off'}`;
+        const logActivityQuery = "INSERT INTO appliance_activity_logs (zone, activity) VALUES ($1, $2)";
+        await pool.query(logActivityQuery, [zone, activity]);
 
         res.json({ success: true, appliances: updateAllResult.rows});
     } catch (error) {

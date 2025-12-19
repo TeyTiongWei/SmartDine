@@ -30,14 +30,16 @@
                 </a>
             </li>
             <li>
-                <a href="/appliances" class="nav-link px-0 align-middle">
+                <a href="/applianceSettings" class="nav-link px-0 align-middle">
                     <img src="/images/appliances.png" alt="appliances">
                     <span class="ms-1 d-none d-sm-inline">Appliance Settings</span>
                 </a>
             </li>
         </ul>
         <div class="pb-4 w-100 px-1">
-            <button class="btn btn-danger btn-lg w-100 fw-semibold" id="logoutBtn">Logout</button>
+            <form action="/logout" method="POST">
+                <button type="submit" class="btn btn-danger btn-lg w-100 fw-semibold">Logout</button>                
+            </form>
         </div>
     </div>
 </div>

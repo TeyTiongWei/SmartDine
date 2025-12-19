@@ -84,7 +84,6 @@ const addReservations = async (req, res) => {
             customerName, phoneNumber, email, specialRequests, partySize, tableNumber, reservationDate, reservationTime
         ]);
 
-        // Update table status to 'reserved'
         const updateTableStatusQuery = "UPDATE tables SET status = 'Reserved' WHERE table_number = $1";
         await pool.query(updateTableStatusQuery, [tableNumber]);
 

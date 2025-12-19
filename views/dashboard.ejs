@@ -1,0 +1,137 @@
+<%- contentFor('title') %>
+Admin Dashboard
+
+<%- contentFor('css') %>
+<link rel="stylesheet" href="/css/dashboard.css">
+
+<%- contentFor('body') %>
+<div class="row mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="fw-bold mb-0">Admin Dashboard</h1>
+        <span id="currentTime" class="fw-medium fs-4"></span>        
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-3">
+        <div class="border border-2 rounded-4 p-3 h-100">
+            <p class="fw-medium fs-4">Today's Reservations</p>
+            <span class=" fw-bold fs-4"><img src="/images/todaysReservations.png" class="me-3"><%= todaysReservations %></span>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="border border-2 rounded-4 p-3 h-100">
+            <p class="fw-medium fs-4">Available Tables</p>
+            <span class=" fw-bold fs-4"><img src="/images/availableTables.png" class="me-3"><%= availableTables %></span>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="border border-2 rounded-4 p-3 h-100">
+            <p class="fw-medium fs-4">Reserved Tables</p>
+            <span class=" fw-bold fs-4"><img src="/images/reservedTables.png" class="me-3"><%= reservedTables %></span>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="border border-2 rounded-4 p-3 h-100">
+            <p class="fw-medium fs-4">Occupied Tables</p>
+            <span class=" fw-bold fs-4"><img src="/images/occupiedTables.png" class="me-3"><%= occupiedTables %></span>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="border border-2 rounded-4 p-3 h-100 d-flex flex-column">
+            <p class="fw-medium fs-4">Upcoming Reservations</p>
+            <div class="list-container flex-grow-1">
+                <% if (upcomingReservations.length > 0) { %>
+                    <% upcomingReservations.forEach(reservation => { %>
+                        <div class="border border-2 rounded-4 p-3 mb-2">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <div class="row">
+                                        <span><%= reservation.customer_name %></span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="text-black-50">
+                                            <%= reservation.reservation_time_formatted %>, 
+                                            <%= reservation.party_size %>-people, 
+                                            <%= reservation.table_number %>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <span class="me-2 <%= reservation.status === "Scheduled" ? "status-scheduled" : "status-ongoing" %>">
+                                        <%= reservation.status %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="fs-5 text-black-50">
+                        <p>No upcoming reservations scheduled for today.</p>
+                    </div>
+                <% } %>
+            </div>
+            <a href="viewReservations" type="button" class="btn btn-outline-primary w-100 mt-3 py-3 fs-5">View All Reservations</a>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="border border-2 rounded-4 p-3 h-100 d-flex flex-column">
+            <p class="fw-medium fs-4">Appliance Activity</p>
+            <div class="list-container flex-grow-1">
+                <% if (applianceActivity.length > 0) { %>
+                    <% applianceActivity.forEach(activity => { %>
+                        <div class="border border-2 rounded-4 p-3 mb-2">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <div class="row">
+                                        <span>Zone <%= activity.zone %></span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="text-black-50"><%= activity.activity %></span>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <span class="me-2"><%= activity.activity_time %></span>
+                                </div>
+                            </div>
+                        </div>                            
+                    <% }); %>
+                <% } else { %>
+                    <div class="fs-5 text-black-50">
+                        <p>No appliance activity logged yet.</p>
+                    </div>
+                <% } %>
+            </div>
+            <a href="applianceSettings" type="button" class="btn btn-outline-primary w-100 mt-3 py-3 fs-5">View Appliance Settings</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTime() {
+    const now = new Date();
+
+    const date = now.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+    });
+
+    const time = now.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true
+    }).toLowerCase();
+
+    document.getElementById("currentTime").textContent = `${date}, ${time}`;
+}
+
+updateTime();
+
+// Update every minute
+setInterval(updateTime, 60000);
+</script>

@@ -97,7 +97,6 @@ Tables and Appliances Page
         <div class="border border-2 rounded-4 p-3 h-100">
             <div class="border-2 border-bottom pb-3 d-flex justify-content-between align-items-center">
                 <span class="fw-medium fs-4">Zone A</span>
-                <!-- <button class="btn btn-success">ALL ON</button> -->
                 <button class="btn btn-<%= zoneStatus['A'] ? 'success' : 'secondary' %>"
                     data-zone="A" data-all onclick="toggleAllAppliances(event, this, 'A')">
                     <%= zoneStatus['A'] ? 'ALL ON' : 'ALL OFF' %>
@@ -106,7 +105,6 @@ Tables and Appliances Page
             <div class="mt-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="fs-5"><img src="/images/lights.png" class="me-2">Lights</span>
-                    <!-- <button class="btn btn-success">ON</button> -->
                     <button class="btn btn-<%= appliancesByZone['A']['Lights'].status ? 'success' : 'secondary' %>"
                         data-zone="A" data-name="Lights" onclick="toggleAppliance(event, this, 'A', 'Lights')">
                         <%= appliancesByZone['A']['Lights'].status ? 'ON' : 'OFF' %>
@@ -114,7 +112,6 @@ Tables and Appliances Page
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="fs-5"><img src="/images/fan.png" class="me-2">Fan</span>
-                    <!-- <button class="btn btn-success">ON</button> -->
                     <button class="btn btn-<%= appliancesByZone['A']['Fan'].status ? 'success' : 'secondary' %>"
                         data-zone="A" data-name="Fan" onclick="toggleAppliance(event, this, 'A', 'Fan')">
                         <%= appliancesByZone['A']['Fan'].status ? 'ON' : 'OFF' %>
@@ -122,7 +119,6 @@ Tables and Appliances Page
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="fs-5"><img src="/images/ac.png" class="me-2">AC</span>
-                    <!-- <button class="btn btn-success">ON</button> -->
                     <button class="btn btn-<%= appliancesByZone['A']['AC'].status ? 'success' : 'secondary' %>"
                         data-zone="A" data-name="AC" onclick="toggleAppliance(event, this, 'A', 'AC')">
                         <%= appliancesByZone['A']['AC'].status ? 'ON' : 'OFF' %>
@@ -237,85 +233,3 @@ Tables and Appliances Page
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/tables.js"></script>
-
-<!-- <script>
-function updateTime() {
-    const now = new Date();
-
-    const date = now.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-    });
-
-    const time = now.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true
-    }).toLowerCase();
-
-    document.getElementById("currentTime").textContent = `${date}, ${time}`;
-}
-
-// Run immediately
-updateTime();
-
-// Optional: update every minute
-setInterval(updateTime, 60000);
-
-async function toggleAppliance(event, btn, zone, name) {
-    event.preventDefault();
-    try {
-        const response = await fetch('/toggleAppliance', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ zone, name })
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            btn.classList.toggle('btn-success');
-            btn.classList.toggle('btn-secondary');
-            btn.textContent = data.status ? 'ON' : 'OFF';
-            updateZoneAllButton(zone);
-        }
-    } catch (error) {
-        console.error('Error: ', error);
-    }
-}
-
-async function toggleAllAppliances(event, btn, zone) {
-    event.preventDefault();
-    const allOn = btn.classList.contains('btn-success');
-    const newStatus = !allOn;
-    try {
-        const response = await fetch('/toggleAllAppliances', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ zone, allOn })
-        });
-        const data = await response.json();
-        if (data.success) {
-            document.querySelectorAll(`[data-zone="${zone}"][data-name]`).forEach(b => {
-                b.classList.toggle('btn-success', newStatus);
-                b.classList.toggle('btn-secondary', !newStatus);
-                b.textContent = newStatus ? 'ON' : 'OFF';
-            });
-            btn.classList.toggle('btn-success');
-            btn.classList.toggle('btn-secondary');
-            btn.textContent = newStatus ? 'ALL ON' : 'ALL OFF';
-        }
-    } catch (error) {
-        console.error('Error: ', error);
-    }
-}
-
-function updateZoneAllButton(zone) {
-    const btns = document.querySelectorAll(`[data-zone="${zone}"][data-name]`);
-    const allBtn = document.querySelector(`[data-zone="${zone}"][data-all]`);
-    const allOn = Array.from(btns).every(b => b.classList.contains('btn-success'));
-    allBtn.classList.toggle('btn-success', allOn);
-    allBtn.classList.toggle('btn-secondary', !allOn);
-    allBtn.textContent = allOn ? 'ALL ON' : 'ALL OFF';
-}
-</script> -->

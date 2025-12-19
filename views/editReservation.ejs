@@ -103,15 +103,10 @@ Edit Reservation
                     </p>
                 <% } %>
                 <div class="col-lg-3">
-                    <!-- <form action="/editReservation/<%= reservation.id %>?_method=PATCH" method="POST"> -->
-                        <!-- <input type="hidden" name="_method" value="PATCH"> -->
-                        <button type="submit" formaction="/editReservation/<%= reservation.id %>?_method=PATCH" class="btn btn-lg btn-danger w-100 fw-semibold">Cancel Reservation</button>
-                    <!-- </form> -->
-                    <!-- <a href="/viewReservations" class="btn btn-lg btn-danger w-100 fw-semibold">Cancel Reservation</a> -->
+                    <button type="submit" formaction="/editReservation/<%= reservation.id %>?_method=PATCH" class="btn btn-lg btn-danger w-100 fw-semibold">Cancel Reservation</button>
                 </div>
                 <div class="col-lg-2 offset-lg-4">
                     <a href="/viewReservations" class="btn btn-lg btn-secondary w-100 fw-semibold">Back</a>
-                    <!-- <button type="reset" class="btn btn-lg btn-secondary w-100 fw-semibold">Back</button> -->
                 </div>
                 <div class="col-lg-3">
                     <button type="submit" class="btn btn-lg btn-primary w-100 fw-semibold">Save Changes</button>

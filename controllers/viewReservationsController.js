@@ -22,7 +22,7 @@ const renderViewReservationsPage = async (req, res) => {
             party_size, table_number, status
             FROM reservations
             WHERE status IN ('Completed', 'Cancelled')
-            ORDER BY id ASC`;
+            ORDER BY reservation_date ASC, reservation_time ASC`;
 
         const upcomingReservations = await pool.query(upcomingQuery);
         const pastReservations = await pool.query(pastQuery);

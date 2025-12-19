@@ -1,0 +1,169 @@
+<%- contentFor('title') %>
+Appliance Settings
+
+<%- contentFor('css') %>
+<link rel="stylesheet" href="/css/applianceSettings.css">
+
+<%- contentFor('body') %>
+<div class="mb-4">
+    <h1 class="fw-bold mb-0">Appliance Settings</h1>
+    <p class="text-secondary fs-4">Configure global or zone-specific settings for your restaurant's smart appliances</p>
+</div>
+<!-- Global Settings Form -->
+<div class="border border-2 rounded-4 px-4 py-4 mb-3">
+    <form action="/applianceSettingsGlobal" method="POST" class="needs-validation" novalidate>
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bold fs-3">Global Settings</span>
+                    <button type="submit" class="btn btn-lg btn-primary fw-semibold">Save Changes</button>
+                </div>
+                <div class="col-lg-6">
+                    <!-- <span class="fw-medium fs-5">Default Activation Time</span> -->
+                    <label for="defaultActivationTime" class="form-label fw-bold fs-5 mb-4">Default Activation Time</label>                 
+                    <div class="d-flex align-items-center mb-4">
+                        <input type="number" style="width: 14%" class="form-control form-control-lg border border-2 me-2" id="defaultActivationTime" name="defaultActivationTime" placeholder="15" min="1" 
+                            value="<%= globalSettings.activation_minutes %>" required>
+                        <span class="fw-medium fs-5">minutes before reservation</span>                    
+                    </div>
+                    <p class="text-secondary mb-0">Time before reservation when appliances are automatically activated</p>
+                </div>
+                <div class="col-lg-6">
+                    <label for="defaultShutdownTime" class="form-label fw-bold fs-5 mb-4">Default Shutdown Time</label>                 
+                    <div class="d-flex align-items-center mb-4">
+                        <input type="number" style="width: 14%" class="form-control form-control-lg border border-2 me-2" id="defaultShutdownTime" name="defaultShutdownTime" placeholder="60" min="1" 
+                            value="<%= globalSettings.shutdown_minutes %>" required>
+                        <span class="fw-medium fs-5">minutes after reservation</span>                    
+                    </div>
+                    <p class="text-secondary mb-0">Time after reservation when appliances are automatically deactivated</p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Zone-specific Settings Form -->
+<div class="border border-2 rounded-4 px-4 py-4">
+    <form action="/applianceSettingsZone" method="POST" class="needs-validation" novalidate>
+        <div class="row g-2 mb-1">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-bold fs-3">Zone-specific Settings</span>
+                <button type="submit" class="btn btn-lg btn-primary fw-semibold">Save Changes</button>
+            </div>
+
+            <!-- Zone A -->
+            <% const dataA = zoneData['A']; %>
+            <div class="col-lg-3">
+                <div class="border border-2 rounded-4 p-3 h-100">
+                    <div class="border-2 border-bottom pb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-medium fs-5">Zone A</span>
+                        <button type="button" class="btn <%= dataA.use_custom ? 'btn-success' : 'btn-secondary' %>"
+                            onclick="toggleUseCustom(event, this, 'A')">
+                            <%= dataA.use_custom ? 'ON' : 'OFF' %>
+                        </button>
+                    </div>
+                    <div id="settingsZoneA" class="mt-2 <%= dataA.use_custom ? '' : 'text-black-50' %>">
+                        <label for="activationTimeZoneA" class="form-label fw-bold fs-5">Appliance Activation Time</label>
+                        <div class="d-flex align-items-center mb-3">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="activationTimeZoneA" name="activationTimeZoneA" placeholder="15" min="1" 
+                                value="<%= dataA.activation_minutes %>" <%= dataA.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes before reservation</span>                    
+                        </div>
+                        <label for="shutdownTimeZoneA" class="form-label fw-bold fs-5">Appliance Shutdown Time</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="shutdownTimeZoneA" name="shutdownTimeZoneA" placeholder="60" min="1" 
+                                value="<%= dataA.shutdown_minutes %>" <%= dataA.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes after reservation</span>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone B -->
+            <% const dataB = zoneData['B']; %>
+            <div class="col-lg-3">
+                <div class="border border-2 rounded-4 p-3 h-100">
+                    <div class="border-2 border-bottom pb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-medium fs-5">Zone B</span>
+                        <button type="button" class="btn <%= dataB.use_custom ? 'btn-success' : 'btn-secondary' %>"
+                            onclick="toggleUseCustom(event, this, 'B')">
+                            <%= dataB.use_custom ? 'ON' : 'OFF' %>
+                        </button>
+                    </div>
+                    <div id="settingsZoneB" class="mt-2 <%= dataB.use_custom ? '' : 'text-black-50' %>">
+                        <label for="activationTimeZoneB" class="form-label fw-bold fs-5">Appliance Activation Time</label>
+                        <div class="d-flex align-items-center mb-3">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="activationTimeZoneB" name="activationTimeZoneB" placeholder="15" min="1"
+                                value="<%= dataB.activation_minutes %>" <%= dataB.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes before reservation</span>                    
+                        </div>
+                        <label for="shutdownTimeZoneB" class="form-label fw-bold fs-5">Appliance Shutdown Time</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="shutdownTimeZoneB" name="shutdownTimeZoneB" placeholder="60" min="1" 
+                                value="<%= dataB.shutdown_minutes %>" <%= dataB.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes after reservation</span>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone C -->
+            <% const dataC = zoneData['C']; %>
+            <div class="col-lg-3">
+                <div class="border border-2 rounded-4 p-3 h-100">
+                    <div class="border-2 border-bottom pb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-medium fs-5">Zone C</span>
+                        <button type="button" class="btn <%= dataC.use_custom ? 'btn-success' : 'btn-secondary' %>"
+                            onclick="toggleUseCustom(event, this, 'C')">
+                            <%= dataC.use_custom ? 'ON' : 'OFF' %>
+                        </button>
+                    </div>
+                    <div id="settingsZoneC" class="mt-2 <%= dataC.use_custom ? '' : 'text-black-50' %>">
+                        <label for="activationTimeZoneC" class="form-label fw-bold fs-5">Appliance Activation Time</label>
+                        <div class="d-flex align-items-center mb-3">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="activationTimeZoneC" name="activationTimeZoneC" placeholder="15" min="1" 
+                                value="<%= dataC.activation_minutes %>" <%= dataC.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes before reservation</span>                    
+                        </div>
+                        <label for="shutdownTimeZoneC" class="form-label fw-bold fs-5">Appliance Shutdown Time</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="shutdownTimeZoneC" name="shutdownTimeZoneC" placeholder="60" min="1" 
+                                value="<%= dataC.shutdown_minutes %>" <%= dataC.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes after reservation</span>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone D -->
+            <% const dataD = zoneData['D']; %>
+            <div class="col-lg-3">
+                <div class="border border-2 rounded-4 p-3 h-100">
+                    <div class="border-2 border-bottom pb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-medium fs-5">Zone D</span>
+                        <button type="button" class="btn <%= dataD.use_custom ? 'btn-success' : 'btn-secondary' %>"
+                            onclick="toggleUseCustom(event, this, 'D')">
+                            <%= dataD.use_custom ? 'ON' : 'OFF' %>
+                        </button>
+                    </div>
+                    <div id="settingsZoneD" class="mt-2 <%= dataD.use_custom ? '' : 'text-black-50' %>">
+                        <label for="activationTimeZoneD" class="form-label fw-bold fs-5">Appliance Activation Time</label>
+                        <div class="d-flex align-items-center mb-3">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="activationTimeZoneD" name="activationTimeZoneD" placeholder="15" min="1" 
+                                value="<%= dataD.activation_minutes %>" <%= dataD.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes before reservation</span>                    
+                        </div>
+                        <label for="shutdownTimeZoneD" class="form-label fw-bold fs-5">Appliance Shutdown Time</label>
+                        <div class="d-flex align-items-center mb-2">
+                            <input type="number" class="form-control form-control-lg border border-2 me-2 w-50" id="shutdownTimeZoneD" name="shutdownTimeZoneD" placeholder="60" min="1" 
+                                value="<%= dataD.shutdown_minutes %>" <%= dataD.use_custom ? '' : 'disabled' %> required>
+                            <span class="fw-medium fs-5">minutes after reservation</span>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/js/applianceSettings.js"></script>

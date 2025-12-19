@@ -33,10 +33,8 @@ function updateTime() {
     document.getElementById("currentTime").textContent = `${date}, ${time}`;
 }
 
-// Run immediately
 updateTime();
 
-// Optional: update every minute
 setInterval(updateTime, 60000);
 
 async function toggleAppliance(event, btn, zone, name) {

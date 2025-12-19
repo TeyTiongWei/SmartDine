@@ -1,4 +1,9 @@
 const pool = require("../database");
+const bcrypt = require('bcrypt');
+
+const renderRegisterPage = (req, res) => {
+    res.render("register", { layout: false });
+}
 
 const register = async(req, res) => {
     try {
@@ -25,17 +30,20 @@ const register = async(req, res) => {
                 return res.redirect("/register");
             }
 
-            const insertQuery = "INSERT INTO admins (username, email, password) VALUES ($1, $2, $3)";
-            await pool.query(insertQuery, [username, email, password]);
-            res.redirect("/dashboard"); // Maybe can add success flash before this
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const insertQuery = "INSERT INTO admins (username, email, password) VALUES ($1, $2, $3) RETURNING id";
+            const newAdmin = await pool.query(insertQuery, [username, email, hashedPassword]);
+            
+            req.session.adminId = newAdmin.rows[0].id;
+
+            res.redirect("/dashboard"); 
         }
 
     } catch (error) {
         console.error("Login error:", error);
         req.flash("error", "An error has occured. Please try again.");
         res.redirect("/login");
-        // res.status(500).json({message: "Server error"});   Version 1
     }
 }
 
-module.exports = register;
+module.exports = { renderRegisterPage, register };

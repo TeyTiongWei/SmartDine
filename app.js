@@ -5,20 +5,22 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require("path");
-const pool = require("./database"); // Might not need this
-const login = require('./controllers/loginController');
-const register = require('./controllers/registerController');
+const {renderLoginPage, login, logout} = require('./controllers/loginController');
+const {renderRegisterPage, register} = require('./controllers/registerController');
 const {renderAddReservationsPage, addReservations} = require('./controllers/addReservationsController');
 const {renderViewReservationsPage} = require('./controllers/viewReservationsController');
 const {renderEditReservationPage, updateReservation, cancelReservation} = require('./controllers/editReservationController');
 const {renderTablesPage, toggleAppliance, toggleAllAppliances} = require('./controllers/tablesController');
+const {renderApplianceSettingsPage, toggleUseCustom, setGlobalSettings, setZoneSettings} = require('./controllers/applianceSettingsController');
+const {renderDashboardPage} = require('./controllers/dashboardController');
 const { startScheduler } = require('./public/js/scheduler');
+const { isLoggedIn, isNotLoggedIn } = require('./middleware');
 const methodOverride = require('method-override');
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server); // Initialize Socket.IO
+const io = socketIo(server);
 
-startScheduler(io);
+startScheduler(io); // TURN THIS BACK ON LATER
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -36,10 +38,6 @@ app.use(flash());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// pool.connect()
-//     .then(() => console.log("Connected to the database"))
-//     .catch(err => console.error("Database connection error", err.stack));
-
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(methodOverride("_method"));
@@ -54,37 +52,43 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/login", (req, res) => {
-    res.render("login", { layout: false });
-})
+app.get("/login", isNotLoggedIn, renderLoginPage);
 
-app.post("/login", login);
+app.post("/login", isNotLoggedIn, login);
 
-app.get("/register", (req, res) => {
-    res.render("register", { layout: false });
-});
+app.post("/logout", isLoggedIn, logout);
 
-app.post("/register", register);
+app.get("/register", isNotLoggedIn, renderRegisterPage);
 
-app.get("/addReservations", renderAddReservationsPage);
+app.post("/register", isNotLoggedIn, register);
 
-app.post("/addReservations", addReservations);
+app.get("/addReservations", isLoggedIn, renderAddReservationsPage);
 
-app.get("/viewReservations", renderViewReservationsPage);
+app.post("/addReservations", isLoggedIn, addReservations);
 
-app.get("/editReservation/:id", renderEditReservationPage);
+app.get("/viewReservations", isLoggedIn, renderViewReservationsPage);
 
-app.post("/editReservation/:id", updateReservation);
+app.get("/editReservation/:id", isLoggedIn, renderEditReservationPage);
 
-app.patch("/editReservation/:id", cancelReservation);
+app.post("/editReservation/:id", isLoggedIn, updateReservation);
 
-app.get("/tables", renderTablesPage);
+app.patch("/editReservation/:id", isLoggedIn, cancelReservation);
 
-app.post("/toggleAppliance", toggleAppliance);
+app.get("/tables", isLoggedIn, renderTablesPage);
 
-app.post("/toggleAllAppliances", toggleAllAppliances);
+app.post("/toggleAppliance", isLoggedIn, toggleAppliance);
 
-// startScheduler(io);
+app.post("/toggleAllAppliances", isLoggedIn, toggleAllAppliances);
+
+app.get("/applianceSettings", isLoggedIn, renderApplianceSettingsPage);
+
+app.post("/toggleUseCustom", isLoggedIn, toggleUseCustom);
+
+app.post("/applianceSettingsGlobal", isLoggedIn, setGlobalSettings);
+
+app.post("/applianceSettingsZone", isLoggedIn, setZoneSettings);
+
+app.get("/dashboard", isLoggedIn, renderDashboardPage);
 
 server.listen(3000, () => {
     console.log("Server is running on port 3000");
