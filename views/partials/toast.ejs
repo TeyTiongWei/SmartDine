@@ -1,0 +1,33 @@
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11;">
+    <% if (success && success.length > 0) { %>
+        <div class="toast border border-success show" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: #f0fdf4;">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" style="color: #06a13f;">
+                    <%= success[0] %>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" style="color: #06a13f;"></button>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (error && error.length > 0) { %>
+        <div class="toast border border-danger show" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: #fef2f2;">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" style="color: #dc2626;">
+                    <%= error[0] %>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" style="color: #dc2626;"></button>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    const toasts = document.querySelectorAll('.toast');
+    toasts.forEach(toast => {
+        setTimeout(() => {
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.hide();
+        }, 4000);
+    });
+</script>

@@ -9,7 +9,7 @@ const {renderLoginPage, login, logout} = require('./controllers/loginController'
 const {renderRegisterPage, register} = require('./controllers/registerController');
 const {renderAddReservationsPage, addReservations} = require('./controllers/addReservationsController');
 const {renderViewReservationsPage} = require('./controllers/viewReservationsController');
-const {renderEditReservationPage, updateReservation, cancelReservation} = require('./controllers/editReservationController');
+const {renderEditReservationPage, updateReservation, cancelReservation, deleteReservation} = require('./controllers/editReservationController');
 const {renderTablesPage, toggleAppliance, toggleAllAppliances} = require('./controllers/tablesController');
 const {renderApplianceSettingsPage, toggleUseCustom, setGlobalSettings, setZoneSettings} = require('./controllers/applianceSettingsController');
 const {renderDashboardPage} = require('./controllers/dashboardController');
@@ -20,7 +20,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-startScheduler(io); // TURN THIS BACK ON LATER
+//startScheduler(io); // TURN THIS BACK ON LATER
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -43,6 +43,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use(methodOverride("_method"));
 
 app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
 })
@@ -73,6 +74,8 @@ app.get("/editReservation/:id", isLoggedIn, renderEditReservationPage);
 app.post("/editReservation/:id", isLoggedIn, updateReservation);
 
 app.patch("/editReservation/:id", isLoggedIn, cancelReservation);
+
+app.delete("/editReservation/:id", isLoggedIn, deleteReservation);
 
 app.get("/tables", isLoggedIn, renderTablesPage);
 

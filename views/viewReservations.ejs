@@ -72,7 +72,11 @@ View Reservations
                 <td><%= r.table_number %></td>
                 <td class="status-<%= r.status.toLowerCase() %>"><%= r.status %></td>
                 <td>
-                    <a href="/deleteReservation/<%= r.id %>" class="text-danger">Delete</a>
+                    <form action="/editReservation/<%= r.id %>?_method=DELETE" method="POST">
+                        <input type="hidden" name="tableNumber" value="<%= r.table_number %>">
+                        <button type="submit" class="btn btn-link text-danger p-0 m-0">Delete</button>
+                    </form>
+                    <!-- <a href="/deleteReservation/<%= r.id %>" class="text-danger">Delete</a> -->
                 </td>
             </tr>
             <% }); %>

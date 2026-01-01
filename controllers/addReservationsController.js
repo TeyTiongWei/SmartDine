@@ -87,6 +87,7 @@ const addReservations = async (req, res) => {
         const updateTableStatusQuery = "UPDATE tables SET status = 'Reserved' WHERE table_number = $1";
         await pool.query(updateTableStatusQuery, [tableNumber]);
 
+        req.flash("success", "Reservation Created Successfully");
         res.redirect("/viewReservations");
 
     } catch (error) {

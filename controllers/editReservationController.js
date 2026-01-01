@@ -63,6 +63,10 @@ const updateReservation = async (req, res) => {
         const { customerName, partySize, phoneNumber, tableNumber, 
                 email, reservationDate, specialRequests, reservationTime } = req.body;
 
+        const getOldTableQuery = "SELECT table_number FROM reservations WHERE id = $1";
+        const oldTableResult = await pool.query(getOldTableQuery, [id]);
+        const oldTableNumber = oldTableResult.rows[0].table_number;
+
         const query = `
             UPDATE reservations 
             SET customer_name = $1, party_size = $2, phone_number = $3,
@@ -75,7 +79,15 @@ const updateReservation = async (req, res) => {
             email, reservationDate, specialRequests, reservationTime, id
         ]);
 
-        // req.flash("success", "Reservation updated successfully");
+        if (oldTableNumber != tableNumber) {
+            const updateOldTableQuery = "UPDATE tables SET status = 'Available' WHERE table_number = $1";
+            await pool.query(updateOldTableQuery, [oldTableNumber]);
+
+            const updateNewTableQuery = "UPDATE tables SET status = 'Reserved' WHERE table_number = $1";
+            await pool.query(updateNewTableQuery, [tableNumber]);
+        }
+
+        req.flash("success", "Reservation Updated Successfully");
         res.redirect("/viewReservations");
 
     } catch (error) {
@@ -86,9 +98,47 @@ const updateReservation = async (req, res) => {
 };
 
 const cancelReservation = async (req, res) => {
-    console.log("Cancel reservation called");
-    console.log("Request body:", req.body);
-    res.redirect("/viewReservations");
-}
+    try{
+        const { id } = req.params;
+        const { tableNumber } = req.body;
 
-module.exports = { renderEditReservationPage, updateReservation, cancelReservation };
+        const cancelReservationQuery = `
+            UPDATE reservations
+            SET status = 'Cancelled'
+            WHERE id = $1`;
+        await pool.query(cancelReservationQuery, [id]);
+
+        const updateTableQuery = `
+            UPDATE tables
+            SET status = 'Available'
+            WHERE table_number = $1`;
+        await pool.query(updateTableQuery, [tableNumber]);
+
+        req.flash("success", "Reservation Cancelled Successfully");
+        res.redirect("/viewReservations");
+
+    } catch (error) {
+        console.error("Error cancelling reservation:", error);
+        req.flash("error", "An error occurred while cancelling the reservation");
+        res.redirect(`/editReservation/${req.params.id}`);
+    }
+};
+
+const deleteReservation = async (req, res) => {
+    try{
+        const { id } = req.params;
+
+        const deleteReservationQuery = "DELETE FROM reservations WHERE id = $1";
+        await pool.query(deleteReservationQuery, [id]);
+
+        req.flash("success", "Reservation Deleted Successfully");
+        res.redirect("/viewReservations");
+
+    } catch (error) {
+        console.error("Error deleting reservation:", error);
+        req.flash("error", "An error occurred while deleting the reservation");
+        res.redirect("/viewReservations");
+    }
+};
+
+module.exports = { renderEditReservationPage, updateReservation, cancelReservation, deleteReservation };

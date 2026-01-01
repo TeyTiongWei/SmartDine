@@ -66,10 +66,12 @@ const setGlobalSettings = async (req, res) => {
             WHERE zone != 'Global' AND use_custom = false`;
 
         await pool.query(updateZoneSettingsQuery, [defaultActivationTime, defaultShutdownTime]);
+        req.flash("success", "Global Settings Saved Successfully");
         return res.redirect("/applianceSettings");
 
     } catch (error) {
         console.error("Error setting global appliance settings: ", error);
+        req.flash("error", "An error occured while saving global settings");
         return res.redirect("/applianceSettings");
     }
 }
@@ -117,9 +119,11 @@ const setZoneSettings = async (req, res) => {
             }
         }
 
+        req.flash("success", "Zone-specific Settings Saved Successfully");
         return res.redirect("/applianceSettings");
     } catch (error) {
         console.error("Error setting zone specific settings: ", error);
+        req.flash("error", "An error occurred while saving zone-speicific settings");
         return res.redirect("/applianceSettings");
     }
 }
